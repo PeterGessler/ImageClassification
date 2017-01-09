@@ -1,6 +1,6 @@
 package expGen;
 
-import io.output.FileWriter;
+import io.output.ExpFileWriter;
 
 import java.io.File;
 import java.util.List;
@@ -55,16 +55,16 @@ public class ExpGenWriter {
 	public void writeExperiment() {
 
 		StringBuilder imgTrSetTxt = buildImageSetTxt(new StringBuilder(), processModel.getImageTrSet());
-		FileWriter.writeOutput(new File(expPath + "/Image_Tr_Set.csv"), imgTrSetTxt.toString());
+		ExpFileWriter.writeOutput(new File(expPath + "/Image_Tr_Set.csv"), imgTrSetTxt.toString());
 		
 		StringBuilder imgTeSetTxt = buildImageSetTxt(new StringBuilder(), processModel.getImageTeSet());
-		FileWriter.writeOutput(new File(expPath + "/Image_Te_Set.csv"), imgTeSetTxt.toString());
+		ExpFileWriter.writeOutput(new File(expPath + "/Image_Te_Set.csv"), imgTeSetTxt.toString());
 		
 		StringBuilder imgFeaTrSetTxt = buildImageFeatureSetTxt(new StringBuilder(), processModel.getImageFeatureTrSet());
-		FileWriter.writeOutput(new File(expPath + "/ImageFeature_Tr_Set.csv"), imgFeaTrSetTxt.toString());
+		ExpFileWriter.writeOutput(new File(expPath + "/ImageFeature_Tr_Set.csv"), imgFeaTrSetTxt.toString());
 		
 		StringBuilder imgFeaTeSetTxt = buildImageFeatureSetTxt(new StringBuilder(), processModel.getImageFeatureTeSet());
-		FileWriter.writeOutput(new File(expPath + "/ImageFeature_Te_Set.csv"), imgFeaTeSetTxt.toString());
+		ExpFileWriter.writeOutput(new File(expPath + "/ImageFeature_Te_Set.csv"), imgFeaTeSetTxt.toString());
 	}
 	
 	private StringBuilder buildImageSetTxt(StringBuilder builder, List<ImageCluster> clusters) {
