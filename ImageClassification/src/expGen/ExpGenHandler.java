@@ -21,8 +21,7 @@ public class ExpGenHandler {
 		
 		dataSelector.startSplitProcess();
 		
-		ExpGenWriter writer = new ExpGenWriter((IWriteInformation) processModel, dataSelector.getSignature());
-		writer.writeExperiment();
+		AExpWriter writer = new ExpARFFWriter((IWriteInformation) processModel, dataSelector.getSignature());
 	}
 
 }

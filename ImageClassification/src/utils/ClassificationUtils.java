@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
-import launcher.ExpGenerator;
 import expGen.container.ImageCluster;
 import expGen.container.ImageData;
 
@@ -13,9 +12,8 @@ public class ClassificationUtils {
 
 	public static File getAbsPathFromFile(String filePath) {
 	
-		File f = new File(ExpGenerator.class.getClassLoader().getResource("")
-				.getFile()).getParentFile();
-	
+		File f = new File(System.getProperty("user.dir"));
+		
 		f = new File(f.getAbsolutePath() + "/" + filePath);
 	
 		return f;
@@ -42,6 +40,20 @@ public class ClassificationUtils {
 		ImageData imgData = imageFeaDb.stream().filter(pred).findFirst().orElse(null);
 		
 		return imgData;
+	}
+	
+	public synchronized static String findImageClass(List<ImageCluster> imageClusters, String id) {
+		
+		Predicate<String> pred = imgId -> imgId.equals(id);
+		
+		for (ImageCluster cluster : imageClusters) {
+						
+			String cId = cluster.getIds().stream().filter(pred).findFirst().orElse(null);
+			
+			if (cId != null)
+				return cluster.getName();
+		}
+		return null;
 	}
 	
 	

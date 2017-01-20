@@ -5,7 +5,6 @@ import io.output.ExpFileWriter;
 import java.io.File;
 import java.util.List;
 
-import utils.ClassificationUtils;
 import expGen.container.ImageCluster;
 import expGen.container.ImageData;
 
@@ -15,44 +14,14 @@ import expGen.container.ImageData;
  * @author Peter Gessler
  *
  */
-public class ExpGenWriter {
-
-	private final static String EXPERIMENTS_PATH = "database/experiments/";
+public class ExpCSVWriter extends AExpWriter {
 	
-	private IWriteInformation processModel = null;
-
-	private String expPath;
-	
-	public ExpGenWriter(IWriteInformation processModel, String expSignature) {
-		
-		this.processModel = processModel;		
-		int expNum = 0;
-		
-		StringBuilder preTxt = new StringBuilder();
-		preTxt.append("0");
-		preTxt.append("0");
-		
-		while (ClassificationUtils.getAbsPathFromFile(EXPERIMENTS_PATH + "e" + preTxt.toString() + expNum + "_" + expSignature).exists()) {
-			
-			preTxt = new StringBuilder();
-			
-			if (expNum < 10)
-				preTxt.append("0");
-			if (expNum < 100)
-				preTxt.append("0");
-			
-			expNum++;
-		}
-		
-		ClassificationUtils.getAbsPathFromFile(EXPERIMENTS_PATH + "e" + preTxt.toString() + expNum + "_" + expSignature).mkdirs();
-		
-		expPath = EXPERIMENTS_PATH + "e" + preTxt.toString() + expNum + "_" + expSignature + '/' + "selectedData";
-		
-		ClassificationUtils.getAbsPathFromFile(expPath).mkdirs();
-		
+	public ExpCSVWriter(IWriteInformation processModel, String expSignature) {
+		super(processModel, expSignature);
 	}
 
-	public void writeExperiment() {
+	@Override
+	public void writeExperiment(String expPath) {
 
 		StringBuilder imgTrSetTxt = buildImageSetTxt(new StringBuilder(), processModel.getImageTrSet());
 		ExpFileWriter.writeOutput(new File(expPath + "/Image_Tr_Set.csv"), imgTrSetTxt.toString());

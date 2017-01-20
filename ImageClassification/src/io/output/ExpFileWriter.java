@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import kNN.RecResult;
+import utils.ClassificationUtils;
 
 /**
  * Write File with data to physical device.
@@ -24,9 +25,9 @@ public class ExpFileWriter {
 
 	public ExpFileWriter(File file) {
 
-		if (!file.exists()) { // checks whether the file is Exist or not
+		if (!ClassificationUtils.getAbsPathFromFile(file.getAbsolutePath()).exists()) { // checks whether the file is Exist or not
 			try {
-				file.createNewFile();
+				ClassificationUtils.getAbsPathFromFile(file.getAbsolutePath()).createNewFile();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -34,7 +35,7 @@ public class ExpFileWriter {
 		}
 
 		try {
-			fileWriter = new FileWriter(file.getAbsoluteFile());
+			fileWriter = new FileWriter(ClassificationUtils.getAbsPathFromFile(file.getAbsolutePath()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
