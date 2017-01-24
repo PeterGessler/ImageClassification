@@ -22,7 +22,7 @@ public abstract class AAccumulatedSelection extends ADataSelection {
 	@Override
 	public void startSplitProcess() {
 
-		List<ImageCluster> trimmedSet = getTrimmedSet(processModel.getImageDb());
+		List<ImageCluster> trimmedSet = getTrimmedSet(processModel.getImageDb(), this.minDataNum);
 		
 		int minClElem = findClMinimum(trimmedSet);
 
@@ -78,21 +78,5 @@ public abstract class AAccumulatedSelection extends ADataSelection {
 			}
 		}
 
-	}
-	
-	private List<ImageCluster> getTrimmedSet(List<ImageCluster> imgClusters) {
-
-		Iterator<ImageCluster> imgCluster = imgClusters.iterator();
-
-		while (imgCluster.hasNext()) {
-			
-			ImageCluster cl = imgCluster.next();
-
-			if (cl.getSetSize() < minDataNum)
-				imgCluster.remove();
-
-		}
-
-		return imgClusters;
 	}
 }

@@ -1,9 +1,8 @@
 package expAnalyzer;
 
-import java.io.File;
-
 import utils.ClassificationUtils;
-import utils.CsvDbConverter;
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSource;
 
 public class ExperimentLoader {
 
@@ -13,7 +12,7 @@ public class ExperimentLoader {
 
 	public ExperimentLoader(IInstantiateDatabase processModel) {
 
-		expFileFolder = processModel.getExpFolderPath() + "/selectedData/";
+		expFileFolder = processModel.getExpFolderPath();
 		this.processModel = processModel;
 	}
 
@@ -24,28 +23,42 @@ public class ExperimentLoader {
 	public void loadAndConvertDatabase() {
 
 		// read training and test files
-		String imageTrSet = expFileFolder + "Image_Tr_Set.csv";
-		String imageTeSet = expFileFolder + "Image_Te_Set.csv";
-		String imageFeaTrSet = expFileFolder + "ImageFeature_Tr_Set.csv";
-		String imageFeaTeSet = expFileFolder + "ImageFeature_Te_Set.csv";
-
-		File imgTrSet = ClassificationUtils.getAbsPathFromFile(imageTrSet);
-		File imgTeSet = ClassificationUtils.getAbsPathFromFile(imageTeSet);
-		File imgFeaTrSet = ClassificationUtils
-				.getAbsPathFromFile(imageFeaTrSet);
-		File imgFeaTeSet = ClassificationUtils
-				.getAbsPathFromFile(imageFeaTeSet);
-
-		// load and convert csv files
-		CsvDbConverter trainingData = new CsvDbConverter(imgTrSet,
-				imgFeaTrSet);
-		CsvDbConverter testData = new CsvDbConverter(imgTeSet, imgFeaTeSet);
-
-		// set lists in process model
-		processModel.setImageTrSet(trainingData.getImageDb());
-		processModel.setImageFeaTrSet(trainingData.getImageFeaturesDb());
+		String imageTrSet = expFileFolder + "/Tr_Set.arff";
+		String imageTeSet = expFileFolder + "/Te_Set.arff";
 		
-		processModel.setImageTeSet(testData.getImageDb());
-		processModel.setImageFeaTeSet(testData.getImageFeaturesDb());
+		DataSource trSource = null;
+		DataSource teSource = null;
+		
+		//System.out.println(ClassificationUtils.getAbsPathFromFile(imageTrSet).getAbsolutePath());
+		
+		try {
+			trSource = new DataSource(ClassificationUtils.getAbsPathFromFile(imageTrSet).getAbsolutePath());
+			teSource = new DataSource(ClassificationUtils.getAbsPathFromFile(imageTeSet).getAbsolutePath());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Instances trSet = null;
+		Instances teSet = null;
+		try {
+			trSet = trSource.getDataSet();
+			teSet = teSource.getDataSet();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		setClassIndex(trSet);
+		setClassIndex(teSet);
+		
+		// set lists in process model
+		processModel.setImageTrSet(trSet);	
+		processModel.setImageTeSet(teSet);
+	}
+	
+	private void setClassIndex(Instances instance) {
+		if (instance.classIndex() == -1)
+			instance.setClassIndex(instance.numAttributes() - 1);
 	}
 }

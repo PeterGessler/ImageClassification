@@ -1,9 +1,6 @@
 package expAnalyzer;
 
-import java.util.List;
-
-import expGen.container.ImageCluster;
-import expGen.container.ImageData;
+import weka.core.Instances;
 
 /**
  * Model to hold and provide training and test experiment data.
@@ -11,70 +8,73 @@ import expGen.container.ImageData;
  * @author Peter Gessler
  *
  */
-public class ExperimentModel implements IInstantiateDatabase, IDatabaseInformation, IImageFeatureInformation {
+public class ExperimentModel implements IInstantiateDatabase, IDatabaseInformation {
 
 	private final static String COMMON_EXP_FOLDER_PATH = "database/experiments/";
 	
+	private final static String COMMON_EVAL_FOLDER_PATH = "database/evaluation/";
+	
 	private static String expFolderPath;
 	
-	private List<ImageCluster> imageTrSet = null;
+	private static String evalFolderPath;
 	
-	private List<ImageCluster> imageTeSet = null;
+	private Instances imgTrSet = null;
 	
-	private List<ImageData> imageFeaTrSet = null;
-	
-	private List<ImageData> imageFeaTeSet = null;
+	private Instances imgTeSet = null;	
 	
 	public ExperimentModel(String expFolderSignature) {
 		
 		// load raw data and convert
 		expFolderPath = COMMON_EXP_FOLDER_PATH + expFolderSignature;
+		evalFolderPath = COMMON_EVAL_FOLDER_PATH + expFolderSignature;
+		
 		ExperimentLoader expLoader = new ExperimentLoader(this);
 		expLoader.loadAndConvertDatabase();
 	}
-	
+
+
+	@Override
+	public void setImageTrSet(Instances trSet) {
+		this.imgTrSet = trSet;
+		
+	}
+
+	@Override
+	public void setImageTeSet(Instances teSet) {
+		this.imgTeSet = teSet;		
+	}
+
+	@Override
+	public Instances getImgTrSet() {
+		try {
+			return this.imgTrSet;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public Instances getImgTeSet() {
+		try {
+			return this.imgTeSet;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
 	public String getExpFolderPath() {
 		return expFolderPath;
 	}
 
-	@Override
-	public void setImageTrSet(List<ImageCluster> imageTrSet) {
-		this.imageTrSet = imageTrSet;
-	}
 
 	@Override
-	public void setImageTeSet(List<ImageCluster> imageTeSet) {
-		this.imageTeSet = imageTeSet;		
-	}
-
-	@Override
-	public void setImageFeaTrSet(List<ImageData> imageFeaTrSet) {
-		this.imageFeaTrSet = imageFeaTrSet;		
-	}
-
-	@Override
-	public void setImageFeaTeSet(List<ImageData> imageFeaTeSet) {
-		this.imageFeaTeSet = imageFeaTeSet;		
-	}
-
-	@Override
-	public List<ImageCluster> getImageTrSet() {
-		return this.imageTrSet;
-	}
-
-	@Override
-	public List<ImageCluster> getImageTeSet() {
-		return this.imageTeSet;
-	}
-
-	@Override
-	public List<ImageData> getImageFeaTrSet() {
-		return this.imageFeaTrSet;
-	}
-
-	@Override
-	public List<ImageData> getImageFeaTeSet() {
-		return this.imageFeaTeSet;
+	public String getEvalFolderPath() {
+		return evalFolderPath;
 	}
 
 }

@@ -1,9 +1,6 @@
 package expAnalyzer;
 
-import java.util.List;
-
-import expGen.container.ImageCluster;
-import expGen.container.ImageData;
+import weka.core.Instances;
 
 /**
  * Set experiment database informations.
@@ -15,11 +12,7 @@ public interface IInstantiateDatabase {
 
 	public String getExpFolderPath();
 	
-	public void setImageTrSet(List<ImageCluster> imageTrSet);
+	public void setImageTrSet(Instances trSet);
 	
-	public void setImageTeSet(List<ImageCluster> imageTeSet);
-	
-	public void setImageFeaTrSet(List<ImageData> imageFeaTrSet);
-	
-	public void setImageFeaTeSet(List<ImageData> imageFeaTeSet);
+	public void setImageTeSet(Instances teSet);
 }

@@ -2,6 +2,7 @@ package launcher;
 
 import utils.ClassificationUtils;
 import dataSelection.ADataSelection;
+import dataSelection.ChoiceSelection;
 import dataSelection.FairSelection;
 import dataSelection.SingleSelection;
 import dataSelection.UnfairSelection;
@@ -36,15 +37,20 @@ import expGen.ExpGenModel;
  */
 public class ExpGenerator {
 
-	private static final String DB_RAW_PATH = "database/raw/";
-
 	private static ExpGenModel expGenModel = null;
 
-	private static int trFlag = 0;
-
-	private static int minDataNum = 0;
-
 	public static void main(String[] args) {
+		
+		String DB_RAW_PATH = "database/raw/";
+		
+		int numValue = 0;
+
+		int minNumData = 0;
+		
+		if (args.length > 3) {
+			numValue = Integer.valueOf(args[4]);
+			minNumData = Integer.valueOf(args[3]);
+		}
 
 		if (!inspectArgList(args))
 			return;
@@ -53,18 +59,13 @@ public class ExpGenerator {
 				ClassificationUtils.getAbsPathFromFile(DB_RAW_PATH + args[0]),
 				ClassificationUtils.getAbsPathFromFile(DB_RAW_PATH + args[1]));
 		final ExpGenHandler expGenCtrl = new ExpGenHandler(expGenModel);
-		expGenCtrl.startSplitProcess(getDataSelector(args[2], minDataNum,
-				trFlag));
+		expGenCtrl.startSplitProcess(getDataSelector(args[2], minNumData,
+				numValue));
 	}
 
 	private static boolean inspectArgList(String[] args) {
-
-		if (args.length > 3) {
-			trFlag = Integer.valueOf(args[4]);
-			minDataNum = Integer.valueOf(args[3]);
-		}
 		
-		int[] trFlags = { 0, 1 };
+		int[] trFlags = {0, 1};
 
 		if (args == null || args[0].equals("-h")) {
 			// TODO help
@@ -74,10 +75,10 @@ public class ExpGenerator {
 		if (args.length < 3) {
 			System.out.println("Error - Too few arguments");
 			return false;
-		} else if (args.length > 5) {
+		} else if (args.length > 6) {
 			System.out.println("Error - Too many arguments");
 			return false;
-		} else if (args[2].equals("acc") && args.length == 5) {
+		} else if ((args[2].equals("acc") || args[2].equals("choice")) && args.length == 5) {
 			return true;
 		} else if (args[2].equals("single") && args.length == 3) {
 			return true;
@@ -95,20 +96,29 @@ public class ExpGenerator {
 		return false;
 	}
 
+	// select split strategy
 	private static ADataSelection getDataSelector(String dataSelector,
-			int minDataNum, int trFlag) {
+			int minNumData, int numValue) {
 
 		switch (dataSelector) {
 		case "acc":
-			if (trFlag == 0) {
-				return new FairSelection(expGenModel, minDataNum);
+			
+			if (numValue == 0) {
+				return new FairSelection(expGenModel, minNumData);
 			} else {
-				return new UnfairSelection(expGenModel, minDataNum);
+				return new UnfairSelection(expGenModel, minNumData);
 			}
 		case "single":
+			
 			return new SingleSelection(expGenModel);
+		case "choice":
+			
+			int numTrData = minNumData;
+			int numTeData = numValue;
+			
+			return new ChoiceSelection(expGenModel, numTrData, numTeData);
 		default:
-			return new FairSelection(expGenModel, minDataNum);
+			return new FairSelection(expGenModel, minNumData);
 		}
 	}
 }

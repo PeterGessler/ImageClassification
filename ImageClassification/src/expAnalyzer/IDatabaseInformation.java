@@ -1,8 +1,7 @@
 package expAnalyzer;
 
-import java.util.List;
+import weka.core.Instances;
 
-import expGen.container.ImageCluster;
 
 /**
  * Get training and test sets in {@link ExperimentModel}.
@@ -10,9 +9,11 @@ import expGen.container.ImageCluster;
  * @author Peter Gessler
  *
  */
-public interface IDatabaseInformation extends IImageFeatureInformation {
+public interface IDatabaseInformation {
 
-	public List<ImageCluster> getImageTrSet();
+	public Instances getImgTrSet();
 	
-	public List<ImageCluster> getImageTeSet();
+	public Instances getImgTeSet();
+	
+	public String getEvalFolderPath();
 }

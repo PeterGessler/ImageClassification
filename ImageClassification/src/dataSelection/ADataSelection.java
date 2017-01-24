@@ -1,9 +1,11 @@
 package dataSelection;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
 import expGen.ICtrlInformation;
+import expGen.container.ImageCluster;
 import expGen.container.ImageData;
 
 public abstract class ADataSelection {
@@ -18,6 +20,22 @@ public abstract class ADataSelection {
 
 	public abstract String getSignature();
 
+	protected List<ImageCluster> getTrimmedSet(List<ImageCluster> imgClusters, int minDataNum) {
+
+		Iterator<ImageCluster> imgCluster = imgClusters.iterator();
+
+		while (imgCluster.hasNext()) {
+			
+			ImageCluster cl = imgCluster.next();
+
+			if (cl.getSetSize() < minDataNum)
+				imgCluster.remove();
+
+		}
+
+		return imgClusters;
+	}
+	
 	protected ImageData findAssociatedImageFeatures(
 			List<ImageData> imageFeatureData, String id) {
 

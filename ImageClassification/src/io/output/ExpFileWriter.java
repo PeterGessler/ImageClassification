@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import kNN.RecResult;
 import utils.ClassificationUtils;
 
 /**
@@ -23,19 +22,14 @@ public class ExpFileWriter {
 
 	private BufferedWriter buffWriter = null;
 
-	public ExpFileWriter(File file) {
-
-		if (!ClassificationUtils.getAbsPathFromFile(file.getAbsolutePath()).exists()) { // checks whether the file is Exist or not
-			try {
-				ClassificationUtils.getAbsPathFromFile(file.getAbsolutePath()).createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} // here if file not exist new file created
+	public ExpFileWriter(File file, String fileName) {
+		
+		if (!ClassificationUtils.getAbsPathFromFile(file.getName()).exists()) { // checks whether the file is Exist or not
+			file.mkdirs();
 		}
 
 		try {
-			fileWriter = new FileWriter(ClassificationUtils.getAbsPathFromFile(file.getAbsolutePath()));
+			fileWriter = new FileWriter(new File (file.getAbsoluteFile() + fileName));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,9 +37,14 @@ public class ExpFileWriter {
 		buffWriter = new BufferedWriter(fileWriter);
 	}
 
-	public void writeOutput(RecResult singleRecResult) {
-		// buffWriter.write(content);
-		// Buschi ToDo
+	
+	public void writeOutput(String content) {
+		try {
+			buffWriter.write(content);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void closeWriter() {
