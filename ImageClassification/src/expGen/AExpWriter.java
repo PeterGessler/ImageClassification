@@ -1,16 +1,19 @@
 package expGen;
 
+import java.util.List;
+
 import utils.ClassificationUtils;
+import expGen.container.ImageCluster;
+import expGen.container.ImageData;
 
 public abstract class AExpWriter {
 
 	protected final static String EXPERIMENTS_PATH = "database/experiments/";
+	
+	protected String expPath = null;
 
-	protected IWriteInformation processModel = null;
-
-	protected AExpWriter(IWriteInformation processModel, String expSignature) {
-
-		this.processModel = processModel;		
+	protected AExpWriter(String expSignature) {
+	
 		int expNum = 0;
 		
 		StringBuilder preTxt = new StringBuilder();
@@ -31,12 +34,10 @@ public abstract class AExpWriter {
 		
 		ClassificationUtils.getAbsPathFromFile(EXPERIMENTS_PATH + "e" + preTxt.toString() + expNum + "_" + expSignature).mkdirs();
 		
-		String expPath = EXPERIMENTS_PATH + "e" + preTxt.toString() + expNum + "_" + expSignature;
+		this.expPath = EXPERIMENTS_PATH + "e" + preTxt.toString() + expNum + "_" + expSignature;
 		
 		ClassificationUtils.getAbsPathFromFile(expPath).mkdirs();
-
-		writeExperiment(expPath);
 	}
 	
-	public abstract void writeExperiment(String expPath);
+	public abstract void writeExperiment(List<ImageCluster> imgCluster, List<ImageData> imgData, String fileName);
 }

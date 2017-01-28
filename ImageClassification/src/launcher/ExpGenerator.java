@@ -1,13 +1,8 @@
 package launcher;
 
 import utils.ClassificationUtils;
-import dataSelection.ADataSelection;
 import dataSelection.ChoiceSelection;
-import dataSelection.FairSelection;
-import dataSelection.SingleSelection;
-import dataSelection.UnfairSelection;
 import expGen.ExpGenHandler;
-import expGen.ExpGenModel;
 
 /**
  * Generate experiment by image and image feature database csv file in directory
@@ -37,88 +32,27 @@ import expGen.ExpGenModel;
  */
 public class ExpGenerator {
 
-	private static ExpGenModel expGenModel = null;
-
 	public static void main(String[] args) {
 		
-		String DB_RAW_PATH = "database/raw/";
+		String DB_RAW_PATH = "database/raw/";	
 		
-		int numValue = 0;
 
-		int minNumData = 0;
-		
-		if (args.length > 3) {
-			numValue = Integer.valueOf(args[4]);
-			minNumData = Integer.valueOf(args[3]);
-		}
-
-		if (!inspectArgList(args))
+		/**
+		 * Inspect argument list depend by possible system process.
+		 */
+		if (args != null && args.length < 5) {
+			System.out.println("Too few arguments");
 			return;
+		} else if ( args != null && args.length > 5) {
+			System.out.println("Too many arguments");
+			return;
+		}
 
-		expGenModel = new ExpGenModel(
-				ClassificationUtils.getAbsPathFromFile(DB_RAW_PATH + args[0]),
-				ClassificationUtils.getAbsPathFromFile(DB_RAW_PATH + args[1]));
-		final ExpGenHandler expGenCtrl = new ExpGenHandler(expGenModel);
-		expGenCtrl.startSplitProcess(getDataSelector(args[2], minNumData,
-				numValue));
-	}
-
-	private static boolean inspectArgList(String[] args) {
 		
-		int[] trFlags = {0, 1};
-
-		if (args == null || args[0].equals("-h")) {
-			// TODO help
-			return false;
-		}
-
-		if (args.length < 3) {
-			System.out.println("Error - Too few arguments");
-			return false;
-		} else if (args.length > 6) {
-			System.out.println("Error - Too many arguments");
-			return false;
-		} else if ((args[2].equals("acc") || args[2].equals("choice")) && args.length == 5) {
-			return true;
-		} else if (args[2].equals("single") && args.length == 3) {
-			return true;
-		} else if (args.length == 4 && args[4] != null) {
-
-			if (!ClassificationUtils.isCorrectNum(Integer.valueOf(args[4]),
-					trFlags)) {
-				System.out
-						.println("Error - no correct flag to set number of test data");
-				return false;
-			}
-		}
-
-		System.out.println("Error - Wrong argument combination");
-		return false;
-	}
-
-	// select split strategy
-	private static ADataSelection getDataSelector(String dataSelector,
-			int minNumData, int numValue) {
-
-		switch (dataSelector) {
-		case "acc":
-			
-			if (numValue == 0) {
-				return new FairSelection(expGenModel, minNumData);
-			} else {
-				return new UnfairSelection(expGenModel, minNumData);
-			}
-		case "single":
-			
-			return new SingleSelection(expGenModel);
-		case "choice":
-			
-			int numTrData = minNumData;
-			int numTeData = numValue;
-			
-			return new ChoiceSelection(expGenModel, numTrData, numTeData);
-		default:
-			return new FairSelection(expGenModel, minNumData);
-		}
+		/**
+		 * Create generator handler to start split process.
+		 */
+		final ExpGenHandler expGenCtrl = new ExpGenHandler(ClassificationUtils.getAbsPathFromFile(DB_RAW_PATH + args[0]), ClassificationUtils.getAbsPathFromFile(DB_RAW_PATH + args[1]));
+		expGenCtrl.startSplitProcess(new ChoiceSelection(Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4])));
 	}
 }

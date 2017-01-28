@@ -11,9 +11,11 @@ import weka.core.Instances;
  */
 public interface IDatabaseInformation {
 
-	public Instances getImgTrSet();
+	public Instances getTrSet(int index);
 	
-	public Instances getImgTeSet();
+	public Instances getAdaptSet();
+	
+	public Instances getTeSet();
 	
 	public String getEvalFolderPath();
 }

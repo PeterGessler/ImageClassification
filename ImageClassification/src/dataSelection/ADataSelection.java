@@ -12,15 +12,21 @@ public abstract class ADataSelection {
 
 	protected ICtrlInformation processModel = null;
 
-	public ADataSelection(ICtrlInformation processModel) {
-		this.processModel = processModel;
-	}
+	
+	public abstract void setProcessModel(ICtrlInformation processModel);
 
 	public abstract void startSplitProcess();
 
 	public abstract String getSignature();
 
-	protected List<ImageCluster> getTrimmedSet(List<ImageCluster> imgClusters, int minDataNum) {
+	/**
+	 * Remove all cluster with to few elements.
+	 * 
+	 * @param imgClusters
+	 * @param minelementNum
+	 * @return
+	 */
+	protected List<ImageCluster> getTrimmedSet(List<ImageCluster> imgClusters, int minelementNum) {
 
 		Iterator<ImageCluster> imgCluster = imgClusters.iterator();
 
@@ -28,7 +34,7 @@ public abstract class ADataSelection {
 			
 			ImageCluster cl = imgCluster.next();
 
-			if (cl.getSetSize() < minDataNum)
+			if (cl.getSetSize() < minelementNum)
 				imgCluster.remove();
 
 		}
@@ -36,6 +42,13 @@ public abstract class ADataSelection {
 		return imgClusters;
 	}
 	
+	/**
+	 * Select ImageData object with equal id from input parameter list.
+	 * 
+	 * @param imageFeatureData
+	 * @param id
+	 * @return
+	 */
 	protected ImageData findAssociatedImageFeatures(
 			List<ImageData> imageFeatureData, String id) {
 

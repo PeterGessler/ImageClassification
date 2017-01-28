@@ -1,5 +1,7 @@
 package expAnalyzer;
 
+import java.util.HashMap;
+
 import utils.ClassificationUtils;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -19,42 +21,30 @@ public class ExperimentLoader {
 	/**
 	 * Load training and test files from selected experiment folder.
 	 * Write .csv file data to process model.
+	 * @throws Exception 
 	 */
-	public void loadAndConvertDatabase() {
+	public void loadAndConvertDatabase(String[] fileNames) throws Exception {
 
-		// read training and test files
-		String imageTrSet = expFileFolder + "/Tr_Set.arff";
-		String imageTeSet = expFileFolder + "/Te_Set.arff";
+		HashMap<Integer, Instances> instanceSets = new HashMap<Integer, Instances>();
 		
-		DataSource trSource = null;
-		DataSource teSource = null;
-		
-		//System.out.println(ClassificationUtils.getAbsPathFromFile(imageTrSet).getAbsolutePath());
-		
-		try {
-			trSource = new DataSource(ClassificationUtils.getAbsPathFromFile(imageTrSet).getAbsolutePath());
-			teSource = new DataSource(ClassificationUtils.getAbsPathFromFile(imageTeSet).getAbsolutePath());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for (int pos = 0; pos < fileNames.length; pos++) {
+			
+			String filePath = expFileFolder + "/" + fileNames[pos] + ".arff";
+			
+			DataSource dataSrc = new DataSource(ClassificationUtils.getAbsPathFromFile(filePath).getAbsolutePath());
+			Instances dataInst = dataSrc.getDataSet();
+			setClassIndex(dataInst);
+			
+			instanceSets.put(pos, dataInst);
 		}
-		
-		Instances trSet = null;
-		Instances teSet = null;
-		try {
-			trSet = trSource.getDataSet();
-			teSet = teSource.getDataSet();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		setClassIndex(trSet);
-		setClassIndex(teSet);
-		
+
 		// set lists in process model
-		processModel.setImageTrSet(trSet);	
-		processModel.setImageTeSet(teSet);
+		processModel.setAdaptSet(instanceSets.get(0));
+		processModel.setTeSet(instanceSets.get(1));
+		
+		for (int pos = 2; pos < instanceSets.size(); pos++) {
+			processModel.addTrSet(instanceSets.get(pos));
+		}
 	}
 	
 	private void setClassIndex(Instances instance) {

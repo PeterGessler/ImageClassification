@@ -12,7 +12,9 @@ public interface IInstantiateDatabase {
 
 	public String getExpFolderPath();
 	
-	public void setImageTrSet(Instances trSet);
+	public void addTrSet(Instances trSet);
 	
-	public void setImageTeSet(Instances teSet);
+	public void setAdaptSet(Instances adaptSet);
+	
+	public void setTeSet(Instances teSet);
 }

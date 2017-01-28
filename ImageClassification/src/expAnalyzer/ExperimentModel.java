@@ -1,5 +1,7 @@
 package expAnalyzer;
 
+import java.util.HashMap;
+
 import weka.core.Instances;
 
 /**
@@ -18,36 +20,49 @@ public class ExperimentModel implements IInstantiateDatabase, IDatabaseInformati
 	
 	private static String evalFolderPath;
 	
-	private Instances imgTrSet = null;
+	private HashMap<Integer, Instances> trSets = null;
 	
-	private Instances imgTeSet = null;	
+	private Instances adaptSet = null;
 	
-	public ExperimentModel(String expFolderSignature) {
+	private Instances teSet = null;	
+	
+	public ExperimentModel(String[] fileNames, String expFolderSignature) {
+		
+		this.trSets = new HashMap<Integer, Instances>();
 		
 		// load raw data and convert
 		expFolderPath = COMMON_EXP_FOLDER_PATH + expFolderSignature;
 		evalFolderPath = COMMON_EVAL_FOLDER_PATH + expFolderSignature;
 		
 		ExperimentLoader expLoader = new ExperimentLoader(this);
-		expLoader.loadAndConvertDatabase();
-	}
-
-
-	@Override
-	public void setImageTrSet(Instances trSet) {
-		this.imgTrSet = trSet;
-		
-	}
-
-	@Override
-	public void setImageTeSet(Instances teSet) {
-		this.imgTeSet = teSet;		
-	}
-
-	@Override
-	public Instances getImgTrSet() {
 		try {
-			return this.imgTrSet;
+			expLoader.loadAndConvertDatabase(fileNames);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	
+	@Override
+	public void addTrSet(Instances trSet) {
+		this.trSets.put(trSets.size(), trSet);		
+	}
+
+	@Override
+	public void setAdaptSet(Instances trSet) {
+		this.adaptSet = trSet;
+	}
+
+	@Override
+	public void setTeSet(Instances teSet) {
+		this.teSet = teSet;		
+	}
+
+	@Override
+	public Instances getAdaptSet() {
+		try {
+			return this.adaptSet;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,9 +71,9 @@ public class ExperimentModel implements IInstantiateDatabase, IDatabaseInformati
 	}
 
 	@Override
-	public Instances getImgTeSet() {
+	public Instances getTeSet() {
 		try {
-			return this.imgTeSet;
+			return this.teSet;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,4 +92,9 @@ public class ExperimentModel implements IInstantiateDatabase, IDatabaseInformati
 		return evalFolderPath;
 	}
 
+
+	@Override
+	public Instances getTrSet(int index) {
+		return trSets.get(index);
+	}
 }

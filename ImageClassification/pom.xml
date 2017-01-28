@@ -19,10 +19,14 @@
   
   <!-- Repositories -->
   <repositories>
-	  <repository>
-		  <id>Weka Stable</id>
-		  <url>https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable/3.6.6</url>
-		  </repository>
+	<repository>
+		<id>Weka Stable</id>
+		<url>https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable/3.6.6</url>
+	</repository>
+	<repository>
+		<id>Apache Common Lang</id>
+		<url>https://mvnrepository.com/artifact/commons-lang/commons-lang</url>
+	</repository>
 	  </repositories>
   
   <!-- Dependencies -->
@@ -31,16 +35,25 @@
 	  	<groupId>nz.ac.waikato.cms.weka</groupId>
 	  	<artifactId>weka-stable</artifactId>
 	 </dependency>
+	 <dependency>
+	    <groupId>commons-lang</groupId>
+	    <artifactId>commons-lang</artifactId>
+	</dependency>
   </dependencies>
   
   <!-- Dependency Management -->
   <dependencyManagement>
   <dependencies>
   	<dependency>
-            <groupId>nz.ac.waikato.cms.weka</groupId>
-            <artifactId>weka-stable</artifactId>
-            <version>3.6.6</version>
+        <groupId>nz.ac.waikato.cms.weka</groupId>
+        <artifactId>weka-stable</artifactId>
+        <version>3.6.6</version>
      </dependency>
+     <dependency>
+	    <groupId>commons-lang</groupId>
+	    <artifactId>commons-lang</artifactId>
+	    <version>2.3</version>
+	</dependency>
   </dependencies>
   </dependencyManagement>
 </project>

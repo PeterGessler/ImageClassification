@@ -1,9 +1,7 @@
 package expGen;
 
-import java.util.List;
+import expGen.container.DataSet;
 
-import expGen.container.ImageCluster;
-import expGen.container.ImageData;
 
 /**
  * Interface return process model informations.
@@ -12,12 +10,12 @@ import expGen.container.ImageData;
  *
  */
 public interface IWriteInformation {
-
-	public List<ImageCluster> getImageTrSet();
 	
-	public List<ImageData> getImageFeatureTrSet();
+	public DataSet getTrSet (Integer key);
 	
-	public List<ImageCluster> getImageTeSet();
+	public int sizeOfTrSets();
 	
-	public List<ImageData> getImageFeatureTeSet();
+	public DataSet getAdaptKSet();
+	
+	public DataSet getTeSet();
 }

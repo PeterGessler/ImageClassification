@@ -9,41 +9,33 @@ import utils.ClassificationUtils;
 import expGen.container.ImageCluster;
 import expGen.container.ImageData;
 
-public class ExpARFFWriter extends AExpWriter {
+public class ARFFWriter extends AExpWriter {
 
-	public ExpARFFWriter(IWriteInformation processModel, String expSignature) {
-		super(processModel, expSignature);
+	public ARFFWriter(String expSignature) {
+		super(expSignature);
 	}
 
 	@Override
-	public void writeExperiment(String expPath) {
+	public void writeExperiment(List<ImageCluster> imgCluster, List<ImageData> imgData, String fileName) {
 
 		StringBuilder arffTrSetText = new StringBuilder();
 		arffTrSetText.append("@relation " + "WekaFileType");
 
 		arffTrSetText = buildArffTxt(arffTrSetText,
-				processModel.getImageTrSet(),
-				processModel.getImageFeatureTrSet());
-		ExpFileWriter.writeOutput(new File(expPath + "/Tr_Set.arff"),
+				imgCluster,
+				imgData);
+		ExpFileWriter.writeOutput(new File(expPath + fileName),
 				arffTrSetText.toString());
-
-		StringBuilder arffTeSetText = new StringBuilder();
-		arffTeSetText.append("@relation " + "WekaFileType");
-		arffTeSetText = buildArffTxt(arffTeSetText,
-				processModel.getImageTeSet(),
-				processModel.getImageFeatureTeSet());
-		ExpFileWriter.writeOutput(new File(expPath + "/Te_Set.arff"),
-				arffTeSetText.toString());
 	}
 
 	private StringBuilder buildArffTxt(StringBuilder arffBuilder,
-			List<ImageCluster> clusters,  List<ImageData> imgFeatureData) {
+			List<ImageCluster> imgCluster,  List<ImageData> imgData) {
 		
 		arffBuilder.append(System.getProperty("line.separator"));
 		arffBuilder.append(System.getProperty("line.separator"));
 		
 		// write attributes
-		int featureNum = imgFeatureData.get(0).getFeatures().length;
+		int featureNum = imgData.get(0).getFeatures().length;
 		
 		for (int pos = 0; pos < featureNum; pos++) {
 			arffBuilder.append("@attribute feature" + pos + " {0,1,2,3,4,5,6,7,8,9}" + System.getProperty("line.separator"));
@@ -54,10 +46,10 @@ public class ExpARFFWriter extends AExpWriter {
 		
 		int cnt = 0;
 		
-		while (cnt < clusters.size()) {
-			classes.append(clusters.get(cnt).getName());
+		while (cnt < imgCluster.size()) {
+			classes.append(imgCluster.get(cnt).getName());
 			
-			if (cnt < (clusters.size() - 1))
+			if (cnt < (imgCluster.size() - 1))
 				classes.append(",");
 			else {
 				classes.append("}");
@@ -73,13 +65,13 @@ public class ExpARFFWriter extends AExpWriter {
 		arffBuilder.append(System.getProperty("line.separator"));		
 		
 		
-		for (ImageData imgData : imgFeatureData) {
+		for (ImageData imagesData : imgData) {
 			
-			for (int pos = 0; pos < imgData.getFeatures().length; pos++) {
-				arffBuilder.append(String.valueOf(imgData.getFeature(pos)).replace(".0", ""));
+			for (int pos = 0; pos < imagesData.getFeatures().length; pos++) {
+				arffBuilder.append(String.valueOf(imagesData.getFeature(pos)).replace(".0", ""));
 				arffBuilder.append(",");
 			}
-			arffBuilder.append(ClassificationUtils.findImageClass(clusters, imgData.getId()));
+			arffBuilder.append(ClassificationUtils.findImageClass(imgCluster, imagesData.getId()));
 			arffBuilder.append("\n");
 		}
 		return arffBuilder;

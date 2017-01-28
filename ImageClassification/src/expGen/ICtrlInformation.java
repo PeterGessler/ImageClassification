@@ -2,6 +2,7 @@ package expGen;
 
 import java.util.List;
 
+import expGen.container.DataSet;
 import expGen.container.ImageCluster;
 import expGen.container.ImageData;
 
@@ -17,15 +18,9 @@ public interface ICtrlInformation {
 	
 	public List<ImageData> getImageFeaturesDb();
 	
-	public void addElemToImageTrSet(String cluster, String id);
+	public void addTrSet(Integer key, DataSet set);
 	
-	public void addElemToImgFeaTrSet(ImageData imageData);
+	public void setAdaptKValSet(DataSet set);
 	
-	public void addElemToImageTeSet(String cluster, String id);
-	
-	public void addElemToImgFeaTeSet(ImageData imageData);
-	
-	public void setImageTeSet(List<ImageCluster> imageTeSet);
-	
-	public void setImageFeatureTeSet(List<ImageData> imageFeatureTeSet);
+	public void setTeSet(DataSet set);
 }
