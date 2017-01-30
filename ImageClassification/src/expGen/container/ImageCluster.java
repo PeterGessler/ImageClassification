@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 /**
  * Container class hold all image ids from equal class signature.
  * 
- * @author Peter Gessler
+ * @author Peter Gessler & Martin Buschack
  *
  */
 public class ImageCluster {

@@ -1,0 +1,13 @@
+Author: Peter Gessler & Martin Buschak
+
+Ausführung von k-nächste Nachbar Klassifikation
+
+---Experiment erzeugen---
+- Kommandozeile öffnen und in den Ordner .../ImageClassification/bin.release wechseln
+- Starten von ExpGenertator mit 
+  ExpGenerator.exe Images.csv EdgeHistogram.csv {Anzahl der Trainingsdaten pro Klasse} {Anzahl der Adaptionsdaten pro Klasse} {Anzahl der Testdaten pro Klasse}
+
+---Experiment mit KNNAnalyzer auswerten---
+- Kommandozeile öffnen und in den Ordner .../ImageClassification/bin.release wechseln
+- Starten von KNNAnalyzer mit
+  KNNAnalyzer.exe {Name des vorher erzeugten Experiments} {maximaler k-Wert}

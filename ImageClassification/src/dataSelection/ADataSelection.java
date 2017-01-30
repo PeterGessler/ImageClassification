@@ -8,23 +8,43 @@ import expGen.ICtrlInformation;
 import expGen.container.ImageCluster;
 import expGen.container.ImageData;
 
+/**
+ * System is designed to use different image class split strategies.
+ * Each split strategy extends by {@link ADataSelection}.
+ * Class contains shared methods.
+ * 
+ * @author Peter Gessler & Martin Buschack
+ *
+ */
 public abstract class ADataSelection {
 
+	/**
+	 * Hold all process data.
+	 */
 	protected ICtrlInformation processModel = null;
 
-	
+	/**
+	 * Set process model in class init process.
+	 * @param processModel
+	 */
 	public abstract void setProcessModel(ICtrlInformation processModel);
 
+	/**
+	 * Contain data selection process structure.
+	 */
 	public abstract void startSplitProcess();
 
+	/**
+	 * @return specific data selection strategy name.
+	 */
 	public abstract String getSignature();
 
 	/**
-	 * Remove all cluster with to few elements.
+	 * Remove all image classes with to few data.
 	 * 
 	 * @param imgClusters
 	 * @param minelementNum
-	 * @return
+	 * @return Set with {@link ImageCluster} objects - contain associated image id's
 	 */
 	protected List<ImageCluster> getTrimmedSet(List<ImageCluster> imgClusters, int minelementNum) {
 
@@ -43,7 +63,7 @@ public abstract class ADataSelection {
 	}
 	
 	/**
-	 * Select ImageData object with equal id from input parameter list.
+	 * Select {@link ImageData} object with same id like input string.
 	 * 
 	 * @param imageFeatureData
 	 * @param id

@@ -4,6 +4,17 @@ import utils.ClassificationUtils;
 import expAnalyzer.ExperimentAnalyzer;
 import expAnalyzer.ExperimentModel;
 
+/**
+ * Evaluate an experiment by k-nearest neighborhood process with data mining
+ * API http://www.cs.waikato.ac.nz/ml/weka/
+ * 
+ * Argument list:
+ * - {experiment name}
+ * - |k value|
+ * 
+ * @author Peter Gessler & Martin Buschack
+ *
+ */
 public class KNNAnalyzer {
 
 	private static int ARGS_CONST = 2;	
@@ -19,13 +30,14 @@ public class KNNAnalyzer {
 			return;
 		}
 
+		// check argument list
 		if (args.length < ARGS_CONST) {
 			System.out.println("Error - Too few arguments");
-			System.out.println("Argument structure is: [expFolder] [clRepresenterNum]");
+			System.out.println("Argument structure is: [expFolder] [kValue]");
 			return;
 		} else if (args.length > ARGS_CONST) {
 			System.out.println("Error - Too many arguments");
-			System.out.println("Argument structure is: [expFolder] [clRepresenterNum]");
+			System.out.println("Argument structure is: [expFolder] [kValue]");
 			return;
 		} else if (!ClassificationUtils.isCorrectNum(Integer.valueOf(args[1]), correctTrNum)) {
 			System.out

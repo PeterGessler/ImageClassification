@@ -18,18 +18,34 @@ import expGen.container.ImageData;
  */
 public class ExpGenModel implements ICtrlInformation, IWriteInformation {
 
+	/**
+	 * {@link ImageCluster} list with associated image id's.
+	 */
 	private List<ImageCluster> imageDb = null;
 
+	/**
+	 * {@link ImageData} list with image feature values.
+	 */
 	private List<ImageData> imageFeaturesDb = null;
 	
+	/**
+	 * All generated training sets.
+	 */
 	private HashMap<Integer, DataSet> trSets = null;
 	
+	/**
+	 * Adaption-set.
+	 */
 	private DataSet adaptKValSet = null;
 	
+	/**
+	 * Test-set.
+	 */
 	private DataSet teSet = null;
 
 	public ExpGenModel(File imageDbFile, File edgeHistogramFile) {	
 
+		// generate image cluster list and image feature list
 		CsvDbConverter dataConv = new CsvDbConverter(imageDbFile, edgeHistogramFile);
 		
 		this.imageDb = dataConv.getImageDb();
@@ -84,7 +100,4 @@ public class ExpGenModel implements ICtrlInformation, IWriteInformation {
 	public DataSet getTeSet() {
 		return this.teSet;
 	}
-
-	
-	
 }

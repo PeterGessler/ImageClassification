@@ -5,9 +5,9 @@ import java.util.HashMap;
 import weka.core.Instances;
 
 /**
- * Model to hold and provide training and test experiment data.
+ * Model to hold and provide training, adaption and test data.
  * 
- * @author Peter Gessler
+ * @author Peter Gessler & Martin Buschack
  *
  */
 public class ExperimentModel implements IInstantiateDatabase, IDatabaseInformation {

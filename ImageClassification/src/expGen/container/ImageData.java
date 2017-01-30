@@ -3,7 +3,7 @@ package expGen.container;
 /**
  * Container class hold all image features in a double array.
  * 
- * @author Peter Gessler
+ * @author Peter Gessler & Martin Buschack
  *
  */
 public class ImageData {

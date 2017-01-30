@@ -9,6 +9,12 @@ import utils.ClassificationUtils;
 import expGen.container.ImageCluster;
 import expGen.container.ImageData;
 
+/**
+ * Write an {@link File} with .arff structure, see http://www.cs.waikato.ac.nz/ml/weka/arff.html.
+ * 
+ * @author Peter Gessler & Martin Buschack
+ *
+ */
 public class ARFFWriter extends AExpWriter {
 
 	public ARFFWriter(String expSignature) {
@@ -21,9 +27,12 @@ public class ARFFWriter extends AExpWriter {
 		StringBuilder arffTrSetText = new StringBuilder();
 		arffTrSetText.append("@relation " + "WekaFileType");
 
+		// enroll all important *-set data
 		arffTrSetText = buildArffTxt(arffTrSetText,
 				imgCluster,
 				imgData);
+		
+		// save as file on storage
 		ExpFileWriter.writeOutput(new File(expPath + fileName),
 				arffTrSetText.toString());
 	}

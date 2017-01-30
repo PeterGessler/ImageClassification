@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Container class to hold image cluster and image feature data.
  * 
- * @author Peter Gessler
+ * @author Peter Gessler & Martin Buschack
  *
  */
 public class DataSet {
